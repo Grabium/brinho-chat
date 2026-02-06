@@ -20,6 +20,14 @@ class TalkService
             ]);
         }
 
+        session()->put('talk_id', $talk->id);
         return $talk;
+    }
+
+    public function getReceiverUserId(int $senderUserId, int $talkId): int
+    {
+        $talk = Talk::findOrFail($talkId);
+
+        return ($talk->creator_user_id === $senderUserId) ? $talk->guest_user_id : $talk->creator_user_id;
     }
 }

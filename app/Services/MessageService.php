@@ -24,12 +24,21 @@ class MessageService
         string $content
     )
     {
-        $m = Message::create(
+        $messageModel = Message::create(
             [
                 'sender_user_id' => $senderUserId,
                 'talk_id' => $talkId,
                 'content' => $content
             ]
         );
+
+        event(
+            new \App\Events\MessageSentEvent(
+                app(\App\Services\TalkService::class)->getReceiverUserId($senderUserId, $talkId),
+                $talkId
+            )
+        );
+
+        return $messageModel;
     }
 }

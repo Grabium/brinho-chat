@@ -67,8 +67,24 @@ class Chat extends Component
         
      
         $this->talk = app(TalkService::class)->findOrCreateTalk(creatorUserId: auth()->id(), guestUserId: $guestUserId);
-        $this->messages = app(\App\Services\MessageService::class)->getAllMessagesOfTalk(talkId: $this->talk->id);
+        $this->updateAllMessagesOfThisTalk();
     }
 
+    // Faz a inscrição no canal privado para acionar o listener updateAllMessagesOfThisTalk
+    public function getListeners()
+    {
+        $userId = auth()->id();
+        $talkId = $this->talk->id;
 
+
+        return [
+            "echo-private:receiver.{$userId}_talk.{$talkId},MessageSentEvent" => 'updateAllMessagesOfThisTalk',
+        ];
+    }
+
+    //defina aqui a função
+    public function updateAllMessagesOfThisTalk(): void
+    {
+        $this->messages = app(\App\Services\MessageService::class)->getAllMessagesOfTalk(talkId: $this->talk->id);
+    }
 }

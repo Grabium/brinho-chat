@@ -36,6 +36,7 @@
                             <div class="chat-users">
                                 <div class="users-list">
                                     @foreach ($users as $user)
+                                    
                                         <div class="chat-user">
                                             
                                             <span 
@@ -61,6 +62,7 @@
                     </div>
                     <div class="row">
                         <form wire:submit.prevent="sendMessage">
+                            @csrf
                             <div class="col-lg-12">
                                 <div class="chat-message-form">
                                     <div class="form-group">
