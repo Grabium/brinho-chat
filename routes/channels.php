@@ -1,8 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Broadcast;
+use App\Models\User;
 
-Broadcast::channel('receiver.{userId}_talk.{talkId}', function ($user, $userId, $talkId) {
-    dd(session('talk_id'));
-    return (((int) $user->id === (int) $userId) && (session('talk_id') === (string) $talkId));
+Broadcast::channel('receiver.{userId}', function(User $user, $userId){
+    $userVerified = ((int) $userId === (int) $user->id );
+    return $userVerified;
 });

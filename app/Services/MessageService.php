@@ -34,8 +34,7 @@ class MessageService
 
         event(
             new \App\Events\MessageSentEvent(
-                app(\App\Services\TalkService::class)->getReceiverUserId($senderUserId, $talkId),
-                $talkId
+                receiverUserId: app(\App\Services\TalkService::class)->getReceiverUserId($senderUserId, $talkId)
             )
         );
 

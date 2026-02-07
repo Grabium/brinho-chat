@@ -5,7 +5,6 @@ namespace App\Livewire\Pages;
 use App\Services\UserService;
 use App\Services\TalkService;
 use Livewire\Component;
-use \Illuminate\Database\Eloquent\Collection;
 use App\Models\Talk;
 use App\Models\User;
 
@@ -13,8 +12,8 @@ class Chat extends Component
 {
     public string $highlightMessage = '';
     public string $newMessage = '';
-    public $messages; //  Collection. type-hiting de Collection no Livewire gera erro.
-    public $users;    // Collection. type-hiting de Collection no Livewire gera erro.
+    public $messages; //  type-hiting de \Illuminate\Database\Eloquent\Collection no Livewire gera erro.
+    public $users;    // type-hiting de \Illuminate\Database\Eloquent\Collection no Livewire gera erro.
     public ?User $guestUser = null;
     public ?Talk $talk = null;
 
@@ -70,19 +69,17 @@ class Chat extends Component
         $this->updateAllMessagesOfThisTalk();
     }
 
-    // Faz a inscrição no canal privado para acionar o listener updateAllMessagesOfThisTalk
     public function getListeners()
     {
         $userId = auth()->id();
-        $talkId = $this->talk->id;
+        // $talkId = $this->talk->id;
 
 
         return [
-            "echo-private:receiver.{$userId}_talk.{$talkId},MessageSentEvent" => 'updateAllMessagesOfThisTalk',
+            "echo-private:receiver.{$userId},MessageSentEvent" => 'updateAllMessagesOfThisTalk',
         ];
     }
 
-    //defina aqui a função
     public function updateAllMessagesOfThisTalk(): void
     {
         $this->messages = app(\App\Services\MessageService::class)->getAllMessagesOfTalk(talkId: $this->talk->id);

@@ -13,13 +13,9 @@ use Illuminate\Queue\SerializesModels;
 class MessageSentEvent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
-
-    /**
-     * Create a new event instance.
-     */
+    
     public function __construct(
-        private int $receiverUserId,
-        private int $talkId
+        private int $receiverUserId
     ){  }
 
     /**
@@ -30,7 +26,7 @@ class MessageSentEvent implements ShouldBroadcast
     public function broadcastOn(): array
     {
         return [
-            new PrivateChannel('receiver.'.$this->receiverUserId.'_talk.'.$this->talkId),
+            new PrivateChannel('receiver.'.$this->receiverUserId),
         ];
     }
 }
